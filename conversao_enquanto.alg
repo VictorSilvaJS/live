@@ -9,11 +9,11 @@ metros, quilometro, metro_cubico, litros: real
 inicio
 opcao <- "0"
 repita
-   escreval("Digite 1 para converter quilômetros em metros!!!")
-   escreval("Digite 2 para converter metros cúbico em litros!!!")
+   escreval("Digite 1 para converter metros cúbico em litros")
+   escreval("Digite 2 para converter quilômetros em metros")
    escreval("Digite 3 para sair do sistema")
    leia(opcao)
-   se opcao = "1" entao
+   se opcao = "2" entao
       limpatela
       escreval("Digite o valor do quilômetros a ser convertido em metros")
       leia(quilometro)
@@ -21,7 +21,7 @@ repita
       escreval(quilometro, " quilometro(s) equivale a", metros, " metro(s)")
       escreval("")
    senao
-      se opcao = "2" entao
+      se opcao = "1" entao
          limpatela
          escreval("Digite o valor do metro cúbico a ser convertido em litro")
          leia(metro_cubico)
