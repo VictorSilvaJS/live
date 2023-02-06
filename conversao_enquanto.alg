@@ -9,8 +9,8 @@ metros, quilometro, metro_cubico, litros: real
 inicio
 opcao <- "0"
 repita
-   escreval("Digite 1 para converter quilômetros em metros")
-   escreval("Digite 2 para converter metros cúbico em litros")
+   escreval("Digite 1 para converter quilômetros em metros!!!")
+   escreval("Digite 2 para converter metros cúbico em litros!!!")
    escreval("Digite 3 para sair do sistema")
    leia(opcao)
    se opcao = "1" entao
