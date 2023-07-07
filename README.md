@@ -2,70 +2,65 @@ Programação de um socket TCP ou UDP.
 
 Implementação de um socket TCP para realizar uma batalha naval entre cliente-servidor.
 
-Protocolo da Camada de Aplicação para o Jogo de Batalha Naval
+Protocolo da Camada de Aplicação para o Jogo de Batalha Naval:
 
-1. Estabelecimento de Conexão:
+1. Estabelecimento da Conexão:
+   - O cliente inicia a conexão com o servidor através do socket TCP.
+   - O cliente envia uma mensagem "StartConnection" para o servidor, contendo o nickname do cliente.
+   - O servidor recebe a mensagem, cria uma nova instância de cliente e inicia o jogo.
+   - O servidor envia uma mensagem "StartGame" para o cliente, indicando que o jogo começou.
 
-   - O cliente inicia uma conexão com o servidor fornecendo um nickname.
-   - O cliente envia a mensagem "StartConnection <nickname>" para o servidor.
-   - O servidor recebe a mensagem, estabelece a conexão com o cliente e registra o cliente como uma parte comunicante.
+2. Fase de Jogo:
+   - Durante a fase de jogo, o cliente e o servidor se alternam realizando ações no jogo.
 
-2. Início do Jogo:
+   - Ações do Cliente:
+     - O cliente realiza uma ação de tiro, selecionando uma posição no tabuleiro inimigo.
+     - O cliente envia uma mensagem "SHOT x,y" para o servidor, informando as coordenadas do tiro.
+     - O servidor recebe a mensagem, verifica se o tiro acertou um navio e responde ao cliente.
 
-   - O servidor informa ao cliente que o jogo começou enviando a mensagem "StartGame".
-   - O cliente recebe a mensagem e imprime que o jogo começou.
-   - O cliente é solicitado a fazer o primeiro movimento.
+   - Ações do Servidor:
+     - O servidor recebe a mensagem de tiro do cliente.
+     - O servidor realiza uma ação de tiro, selecionando uma posição no tabuleiro do cliente.
+     - O servidor envia uma mensagem "HIT x,y" para o cliente, informando que acertou um navio do cliente.
+       (ou envia "MISS" se o tiro não acertou nenhum navio)
 
-3. Movimentos do Cliente:
+3. Atualização do Estado:
+   - Após cada ação de tiro, o estado do jogo é atualizado e os tabuleiros são exibidos.
 
-   - O cliente solicita ao jogador que digite as coordenadas de tiro.
-   - O cliente recebe as coordenadas de tiro do jogador.
-   - O cliente envia a mensagem "SHOT <linha>,<coluna>" para o servidor, indicando a posição do tiro.
-   - O servidor recebe a mensagem de tiro do cliente.
-   - O servidor verifica se o tiro acertou algum navio no tabuleiro do servidor.
-   - Se o tiro acertou um navio:
-     - O servidor marca a posição do tiro como acertada em seu tabuleiro.
-     - O servidor verifica se o navio afundou completamente.
-     - O servidor envia a mensagem "HIT <linha>,<coluna>" de volta para o cliente.
-     - O cliente recebe a mensagem de acerto e atualiza seu próprio tabuleiro.
-     - O cliente é solicitado a fazer outro movimento.
-   - Se o tiro não acertou nenhum navio:
-     - O servidor marca a posição do tiro como falha em seu tabuleiro.
-     - O servidor envia a mensagem "MISS" de volta para o cliente.
-     - O cliente recebe a mensagem de falha.
-     - É a vez do oponente do cliente fazer um movimento.
+   - Cliente:
+     - O cliente atualiza seu tabuleiro inimigo com os resultados dos tiros do servidor.
+     - O cliente exibe seu tabuleiro e o tabuleiro inimigo.
 
-4. Movimentos do Servidor:
+   - Servidor:
+     - O servidor atualiza o tabuleiro do cliente com os resultados dos tiros do cliente.
+     - O servidor exibe seu tabuleiro e o tabuleiro do cliente.
 
-   - O servidor seleciona uma posição de tiro aleatória em seu tabuleiro.
-   - O servidor envia a mensagem "SHOT <linha>,<coluna>" para o cliente, indicando a posição do tiro.
-   - O cliente recebe a mensagem de tiro do servidor.
-   - O cliente verifica se o tiro acertou algum navio em seu tabuleiro.
-   - Se o tiro acertou um navio:
-     - O cliente marca a posição do tiro como acertada em seu tabuleiro.
-     - O cliente verifica se o navio afundou completamente.
-     - O cliente envia a mensagem "HIT <linha>,<coluna>" de volta para o servidor.
-     - O servidor recebe a mensagem de acerto e atualiza seu próprio tabuleiro.
-     - O servidor é solicitado a fazer outro movimento.
-   - Se o tiro não acertou nenhum navio:
-     - O cliente marca a posição do tiro como falha em seu tabuleiro.
-     - O cliente envia a mensagem "MISS" de volta para o servidor.
-     - O servidor recebe a mensagem de falha.
-     - É a vez do cliente fazer outro movimento.
+4. Finalização do Jogo:
+   - O jogo continua até que todas as embarcações de um dos jogadores sejam destruídas.
 
-5. Fim do Jogo:
+   - Cliente:
+     - Se todas as embarcações do cliente forem destruídas, o cliente recebe a mensagem "END" do servidor,
+       indicando que ele venceu o jogo.
+     - O cliente exibe a mensagem de vitória e fecha a conexão.
 
-   - O jogo continua alternando os movimentos entre o cliente e o servidor até que todos os navios de um jogador sejam afundados.
-   - Quando todos os navios de um jogador forem afundados:
-     - O servidor ou cliente verifica se todos os navios do oponente foram afundados.
-     - Se todos os navios do oponente foram afundados:
-       - O servidor envia a mensagem "END" para o cliente, indicando o fim do jogo.
-       - O cliente recebe a mensagem e imprime que o jogo acabou.
-       - A conexão entre o cliente e o servidor é encerrada.
-     - Se todos os navios do jogador forem afundados:
-       - O cliente envia a mensagem "END" para o servidor, indicando o fim do jogo.
-       - O servidor recebe a mensagem e imprime que o jogo acabou.
-       - A conexão entre o cliente e o servidor é encerrada.
+   - Servidor:
+     - Se todas as embarcações do servidor forem destruídas, o servidor encerra a conexão com o cliente.
+     - O servidor exibe a mensagem de derrota e aguarda por novas conexões.
+
+5. Encerramento da Conexão:
+   - Em qualquer momento durante o jogo, se ocorrer um erro ou o cliente encerrar a conexão, o servidor fecha a conexão com o cliente.
+   - O servidor exibe a mensagem de desconexão do cliente e continua aguardando por novas conexões.
+
+Mensagens Trocadas:
+- Cliente para Servidor:
+  - "StartConnection Nick" - Solicita o estabelecimento da conexão com o servidor, fornecendo o apelido do cliente.
+  - "SHOT x,y" - Informa ao servidor a posição do tiro realizado pelo cliente.
+
+- Servidor para Cliente:
+  - "StartGame" - Indica ao cliente que o jogo começou.
+  - "HIT x,y" - Informa ao cliente que o servidor acertou um navio do cliente na posição (x, y).
+  - "MISS" - Informa ao cliente que o servidor errou o tiro.
+  - "END" - Indica ao cliente que todas as suas embarcações foram destruídas e ele venceu o jogo.
 
 Este protocolo da camada de aplicação define a sequência de eventos, estados e mensagens que as partes comunicantes (cliente e servidor) trocam para manter o software do jogo de Batalha Naval funcionando. Cada parte segue uma lógica específica de acordo com as mensagens recebidas e responde de acordo com as regras do jogo. O protocolo abrange o estabelecimento da conexão, início do jogo, movimentos do cliente e servidor, e o encerramento do jogo.
 
