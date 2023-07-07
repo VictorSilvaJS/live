@@ -102,6 +102,4 @@ Para que o software do jogo de Batalha Naval funcione corretamente, são necess�
 
 - Tratamento de desconexão: O software deve ser capaz de lidar com a desconexão de um cliente durante uma partida. Se um jogador desconectar, o jogo deve ser interrompido de forma adequada, exibindo uma mensagem informando a desconexão e encerrando a conexão com o cliente remanescente.
 
-- Interface de usuário: O cliente deve fornecer uma interface de usuário intuitiva e amigável, permitindo que o jogador interaja com o jogo de forma fácil e eficiente. A interface deve exibir claramente os tabuleiros, as mensagens relevantes e as coordenadas de tiro escolhidas pelo jogador.
-
 Esses requisitos mínimos garantem que o software do jogo de Batalha Naval funcione corretamente, permitindo aos jogadores estabelecer conexões, jogar partidas completas e obter uma experiência de jogo satisfatória. A escolha do TCP como protocolo de transporte, juntamente com a implementação adequada do protocolo de aplicação, garante uma comunicação confiável entre o cliente e o servidor, essencial para o correto funcionamento do jogo.
